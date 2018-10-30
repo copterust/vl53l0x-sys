@@ -27,6 +27,7 @@ fn main() {
         .arg(&inc)
         .arg("-I")
         .arg(&plt)
+        .arg("-DSTDINT_H")
         .status()
         .expect("bindgen failed");
     assert!(status.success());
@@ -40,7 +41,11 @@ fn main() {
     ];
 
     let mut build = cc::Build::new();
-    build.include(&inc).include(&plt).warnings(false);
+    build
+        .include(&inc)
+        .include(&plt)
+        .warnings(false)
+        .define("STDINT_H", None);
 
     for file in files {
         build.file(api.join(file));
